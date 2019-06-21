@@ -21,7 +21,7 @@ setup(
 
 	include_package_data=True,
 
-	url="https://github.com/Gillou100/educat_irsensor/irsensors/tree/Dev",
+	url="https://github.com/Gillou100/educat_irsensor/tree/Dev/irsensors",
 
 	classifiers=[
         "Natural Language :: English",
