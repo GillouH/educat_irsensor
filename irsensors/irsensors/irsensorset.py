@@ -7,7 +7,7 @@ from threading import Thread
 
 import serial
 
-from irsensor import IRSensor
+from irsensors.irsensor import IRSensor
 
 
 class IRSensorSet(Thread):
