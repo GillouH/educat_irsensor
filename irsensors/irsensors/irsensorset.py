@@ -194,6 +194,9 @@ class IRSensorSet(Thread):
 		self.stop()
 
 
+__all__ = ["IRSensorSet"]
+
+
 if __name__ == "__main__":
 	test = IRSensorSet()
 	try:

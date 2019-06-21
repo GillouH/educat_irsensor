@@ -14,6 +14,12 @@ In this version, the sensor ID can not be more than 9 (if it is more than 9, it 
 """
 
 
+__version__ = "0.0.1"
+
+
+from irsensorset import IRSensorSet
+
+
 if __name__ == "__main__":
 	try:
 		pass

@@ -192,6 +192,9 @@ class IRSensor:
 		return str(self["distance"])
 
 
+__all__ = ["IRSensor"]
+
+
 if __name__ == "__main__":
 	try:
 		test = IRSensor(id = 0)
