@@ -21,12 +21,11 @@ setup(
 
 	include_package_data=True,
 
-	url="https://github.com/Gillou100/educat_irsensor",
+	url="https://github.com/Gillou100/educat_irsensor/irsensors/tree/Dev",
 
 	classifiers=[
         "Natural Language :: English",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.7",
-        "Topic :: IR Sensor",
-    ],
+        "Programming Language :: Python :: 3.7"
+    ]
 )
