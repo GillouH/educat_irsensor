@@ -20,7 +20,9 @@ Application example:
 
 	import time
 
-	sensor = IRSensorSet()
+	import irsensors
+
+	sensor = irsensors.IRSensorSet()
     try:
         sensor.start()
 
