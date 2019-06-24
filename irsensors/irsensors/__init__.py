@@ -14,7 +14,7 @@ In this version, the sensor ID can not be more than 9 (if it is more than 9, it 
 """
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 from irsensors.irsensorset import IRSensorSet
