@@ -1,0 +1,4 @@
+﻿sensor's size : 10cm x 2.8cm x 1.6cm
+space between 2 sensors : 3cm
+sensor's field of view : 27°
+depth of the sensor : 3,44mm
