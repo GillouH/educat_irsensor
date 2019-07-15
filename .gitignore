@@ -104,7 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # test program
-test.pys
+test.py
 
 # MQTT Pub program
 MQTT/
