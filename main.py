@@ -8,7 +8,7 @@ from irsensors import IRSensorSet
 
 
 if __name__ == "__main__":
-    sensor = IRSensorSet()
+    sensor = IRSensorSet("COM22", [3, 1, 2, 0])
     try:
         sensor.start()
 

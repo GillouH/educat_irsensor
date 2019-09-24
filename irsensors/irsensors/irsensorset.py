@@ -2,10 +2,10 @@
 # -*-coding:utf-8 -*
 
 
-import time
+from time import sleep
 from threading import Thread
 
-import serial
+from serial import Serial
 
 from irsensors.irsensor import IRSensor
 
@@ -24,14 +24,14 @@ class IRSensorSet(Thread):
 		main method :
 			listen(self) :
 				This method is call by the run method, itself called by the start method as explain before. The user needs to launche the start method to access sensor's data.
-				This method read data from the physical sensor throught the _sensor attribute. After a little process on the data, give it to the right IRSensor in the attribute _sensors list.
+				This method reads data from the physical sensor throught the _sensor attribute. After a little process on the data, give it to the right IRSensor in the attribute _sensors list.
 
 		other methods :
 			__len__(self): Give the number of sensor in the sensor set.
 			run(self):
 				This method is executed in parallel to the main programm as soon as the main program call the start method.
-				Firstly, check if the thread is not already launched, then update the _listening attribute, open the serial connection, write '1' for the physical sensor to start sending datas and launche the listen method in a while loop as long as the _listening attribute is True.
-				Finally, when the _listening attribute changes from True to False, stop to launche the listen method, write '0' for the physical sensor to stop sending datas and close the serial connection USB.
+				Firstly, check if the thread is not already launched, then update the _listening attribute, open the serial connection, write "1" for the physical sensor to start sending data and launche the listen method in a while loop as long as the _listening attribute is True.
+				Finally, when the _listening attribute changes from True to False, stop to launche the listen method, write "0" for the physical sensor to stop sending data and close the serial connection USB.
 			stop(self): Change the _listening attribute's value from True to False to stop the loop in the run method.
 			__repr__(self): Return a str which indicates the class of the object and the value of his attributes.
 			__str__(self): Return a str which indicates the distance of each IRSensor in the _sensor list, in the same order as their ID was given in the constructor.
@@ -43,8 +43,8 @@ class IRSensorSet(Thread):
 		"_verbose", "_stopped", "_block"
 	)
 
-	def __init__(self, port='COM22', baud=9600, time_out=1,
-		id_sensors=[3, 1, 2, 0], nb_values_history=10):
+	def __init__(self, port, id_sensors = [0, 1, 2, 3], baud=9600, time_out=1,
+        nb_values_history=10):
 		"""Constructor of the IRSensorSet class.
 
 		Create the serial connection USB.
@@ -53,7 +53,7 @@ class IRSensorSet(Thread):
 
 		"""
 		Thread.__init__(self)
-		object.__setattr__(self, "_sensor", serial.Serial(port, # Represent the USB connection with the physical sensor set.
+		object.__setattr__(self, "_sensor", Serial(port, # Represent the USB connection with the physical sensor set.
 			baud, timeout = time_out))
 		getattr(self, "_sensor").close()
 
@@ -120,45 +120,47 @@ class IRSensorSet(Thread):
 		"""Launche the thread.
 
 		If the thread is already running, do not do anything.
-		If the thread is not already running, open the serial connection USB, write '1' for the physical sensor to start sending datas and launche the listen method in a while loop as long as the _listening attribute is True.
-		Finally, when the _listening attribute changes from True to False, stop to launche the listen method and stop the while loop, write '0' for the physical sensor to stop sending datas and close the serial connection USB.
+		If the thread is not already running, open the serial connection USB, write "1" for the physical sensor to start sending data and launche the listen method in a while loop as long as the _listening attribute is True.
+		Finally, when the _listening attribute changes from True to False, stop to launche the listen method and stop the while loop, write "0" for the physical sensor to stop sending data and close the serial connection USB.
 
 		"""
 		if not getattr(self, "_listening"):
 			object.__setattr__(self, "_listening", True)
 			serial_usb = getattr(self, "_sensor")
 			serial_usb.open()
-			serial_usb.write(b'1')
+			serial_usb.write(b"1")
 			while getattr(self, "_listening"):
 				self.listen()
-			serial_usb.write(b'0')
+			serial_usb.write(b"0")
 			serial_usb.close()
 
 	def listen(self):
-		"""Main part of the thread : Read the datas from USB connection and give it to the right sensor.
+		"""Main part of the thread : Read the data from USB connection and give it to the right sensor.
 
-		Read one line of data from the physical sensor.
-		Decode, split and remove the \r\n at the end of the datas.
+		Read one line of data from the physical sensor. The expected from of the line of data is b"ID,Error_Code,Distance,.........,\r\n". What is between the third and the fourth comma does not matter.
+		Decode, split and remove the \r\n at the end of the data.
 		Simplify the ID. /!\ As the simplification take on count only one digit, it will make some problems if the id is greater or equal to 10.
 		Convert the error code from string to int.
 		Convert the distance from string to float.
-		Search the good IRSensor in the _sensor attribute list and give it datas throught the write method.
+		Search the good IRSensor in the _sensor attribute list and give it data throught the write method.
 
 		"""
-		datas_tmp = getattr(self, "_sensor").readline()
-		datas_tmp = datas_tmp.decode().split(",")[:-1]	# [:-1] because the last element is the string "\r\n".
-		datas_tmp[0] = int(datas_tmp[0][-1])	# Simplify the ID
+		data_tmp = getattr(self, "_sensor").readline()
+		data_tmp = data_tmp.decode().split(",")[:-1]	# [:-1] because the last element is the string "\r\n".
+		data_tmp[0] = int(data_tmp[0][-1])	# Simplify the ID
 
-		datas_tmp[1] = int(datas_tmp[1])  # Convert the error code from string to int.
 
-		datas_tmp[2] = float(datas_tmp[2])    # Convert the distance from string to float.
+		data_tmp[1] = int(data_tmp[1])  # Convert the error code from string to int.
+
+
+		data_tmp[2] = float(data_tmp[2])    # Convert the distance from string to float.
 
 		for sensor in getattr(self, "_sensors"):    # Look for the good sensor ID and give it the data.
-			if sensor["ID"] == datas_tmp[0]:
+			if sensor["ID"] == data_tmp[0]:
 				sensor.write(
-					id=datas_tmp[0],
-					error=datas_tmp[1],
-					distance=datas_tmp[2]
+					id=data_tmp[0],
+					error=data_tmp[1],
+					distance=data_tmp[2]
 				)
 
 	def stop(self):
@@ -182,11 +184,11 @@ class IRSensorSet(Thread):
 		1 column = 1 sensor. Distance is in cm and the value can be up to 10m excluded.
 
 		"""
-		str_datas = ""
+		str_data = ""
 		for i in range(len(self)):
 			distance = getattr(self, "_sensors")[i]["distance"]/10
-			str_datas += ("%5.1f"%distance) + "\t"
-		return str_datas
+			str_data += ("%5.1f"%distance) + "\t"
+		return str_data
 
 
 	def __del__(self):
@@ -198,7 +200,7 @@ __all__ = ["IRSensorSet"]
 
 
 if __name__ == "__main__":
-	test = IRSensorSet()
+	test = IRSensorSet("COM22")
 	try:
 		test.start()
 		print(
@@ -208,7 +210,7 @@ if __name__ == "__main__":
 
 		while True:
 			print(test)
-			time.sleep(0.1)
+			sleep(0.1)
 
 	except KeyboardInterrupt:
 		pass

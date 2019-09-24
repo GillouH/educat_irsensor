@@ -2,19 +2,19 @@
 # -*-coding:utf-8 -*
 
 
-import unittest
+from unittest import TestCase, main
 
 from irsensors.irsensorset import IRSensorSet
 
 
-class IRSensorSetTest(unittest.TestCase):
+class IRSensorSetTest(TestCase):
 	"""This class test the IRSensorSet methods"""
 	pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 	try:
-		unittest.main()
+		main()
 
 	except KeyboardInterrupt:
 		pass

@@ -2,13 +2,13 @@
 # -*-coding:utf-8 -*
 
 
-import unittest
-import random
+from unittest import TestCase, main
+from random import randrange, random
 
 from irsensors.irsensor import IRSensor, mean
 
 
-class IRSensorTest(unittest.TestCase):
+class IRSensorTest(TestCase):
 	"""This class test the IRSensor methods, plus the mean function defined in the same file."""
 	def test_mean(self):
 		"""Test the mean function."""
@@ -17,7 +17,7 @@ class IRSensorTest(unittest.TestCase):
 		self.assertIsNone(mean(None))
 
 		# Check if the function return the correct random list's mean value.
-		list_test = [random.randrange(0, 1000)/100 for i in range(20)]
+		list_test = [randrange(0, 1000)/100 for i in range(20)]
 		mean_value = sum(list_test)/len(list_test)
 		self.assertEqual(mean_value, mean(list_test))
 
@@ -27,9 +27,9 @@ class IRSensorTest(unittest.TestCase):
 		# When the method write is launched, check that the first item of the history list is the latest value given as parameter.
 		# Check also if the distance attribute stay the mean of the history list.
 		# Check the history list size does not change.
-		test_sensor = IRSensor(id=random.random())
+		test_sensor = IRSensor(id=random())
 		LEN = len(getattr(test_sensor, "_history"))
-		values = [random.randrange(0, 1000)/100 for i in range(20)]
+		values = [randrange(0, 1000)/100 for i in range(20)]
 		for value in values:
 			test_sensor.write(id=test_sensor["ID"], distance=value, error=0)
 			self.assertEqual(getattr(test_sensor, "_history")[0], value)
@@ -42,14 +42,14 @@ class IRSensorTest(unittest.TestCase):
 		self.assertEqual(distance_value, test_sensor["distance"])
 
 		# Check if the method returns None when at least one of his parameter is None.
-		self.assertIsNone(test_sensor.write(None, random.random(), 0))
+		self.assertIsNone(test_sensor.write(None, random(), 0))
 		self.assertIsNone(test_sensor.write(test_sensor["ID"], None, 0))
-		self.assertIsNone(test_sensor.write(test_sensor["ID"], random.random(), None))
+		self.assertIsNone(test_sensor.write(test_sensor["ID"], random(), None))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 	try:
-		unittest.main()
+		main()
 
 	except KeyboardInterrupt:
 		pass

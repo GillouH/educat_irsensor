@@ -10,6 +10,9 @@ def mean(float_list):
 	if float_list is None or not float_list:
 		return None
 
+	if len(float_list) == 1:
+		return float_list[0]
+
 	sum = 0
 	for number in float_list:
 		sum += float(number)
@@ -25,7 +28,7 @@ class IRSensor:
 		_distance is the mean value from the _history list. This attribute must not be modified by the outside but can be read as an item with the key value "distance".
 
 		main method :
-			write(self, id, distance, error) : This method should only be called by a IRSensorSet object. The IRSensorSet object read datas from an serial connection and give them to an IRSensor object through this method.
+			write(self, id, distance, error) : This method should only be called by a IRSensorSet object. The IRSensorSet object read data from an serial connection and give them to an IRSensor object through this method.
 
 		other methods :
 			__len__(self): Give the number of values in the history list attribute.

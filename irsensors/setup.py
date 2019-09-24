@@ -14,10 +14,10 @@ setup(
 
 	author="Gilles HUBERT",
 	author_email="gilles.hubert@isen.yncrea.fr",
-	description="This package allows to read datas from an IR sensor set connected by USB.",
+	description="This package allows to read data from an IR sensor set connected by USB.",
 	long_description=irsensors.__doc__,
 
-	install_requires=["serial"],
+	install_requires=["pyserial"],
 
 	include_package_data=True,
 

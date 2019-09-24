@@ -2,10 +2,10 @@
 # -*-coding:utf-8 -*
 
 
-"""This package allows to read datas from an IR sensor set connected by USB.
+"""This package allows to read data from an IR sensor set connected by micro USB / USB.
 
-This package expect the IR sensor set to send string encode line datas as follow:
-"sensorID,errorCode,distance,"
+This package expect the IR sensor set to send string encode line data as follow:
+"ID,Error_Code,Distance,.........,\r\n". What is between the third and the fourth comma does not matter.
 
 This package uses the serial package. You can install it with "pip install serial" command.
 
@@ -14,7 +14,7 @@ In this version, the sensor ID can not be more than 9 (if it is more than 9, it 
 """
 
 
-__version__ = "0.0.5"
+__version__ = "0.0.8"
 
 
 from irsensors.irsensorset import IRSensorSet
